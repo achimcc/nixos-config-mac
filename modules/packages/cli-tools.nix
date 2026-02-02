@@ -4,6 +4,8 @@
   environment.systemPackages = with pkgs; [
     # Version Control & Git
     git
+    gh
+    lazygit
     gitmoji-cli
 
     # Shell & Terminal
@@ -19,6 +21,8 @@
 
     # File Processing
     jq
+    jless
+    yq-go
     pdfcpu
 
     # Security & Crypto
@@ -30,6 +34,11 @@
 
     # Rust
     rustup
+
+    # Development Tools
+    watchexec
+    hyperfine
+    tokei
 
     # Compression & Utilities
     brotli
