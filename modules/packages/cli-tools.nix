@@ -4,10 +4,10 @@
   environment.systemPackages = with pkgs; [
     # Version Control & Git
     git
-    gitmoji
+    gitmoji-cli
 
     # Shell & Terminal
-    nushell
+    # nushell (manuell installiert wegen Build-Problemen in nixpkgs)
     fzf
     carapace
 

@@ -2,13 +2,14 @@
 
 {
   homebrew.casks = [
-    "1password"
-    "slack"
-    "signal"
-    "logseq"
-    "trilium-notes"
+    # Problematische Casks temporär deaktiviert
+    # "1password"
+    # "slack"
+    # "signal"
+    # "logseq"
+    # "trilium-notes"
     "maccy"
-    "raycast"
-    "microsoft-to-do"
+    # "raycast"
+    # "microsoft-to-do"
   ];
 }

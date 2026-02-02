@@ -17,23 +17,22 @@
   # Basis-System-Einstellungen
   system.stateVersion = 5;
 
+  # Primary User für system defaults und homebrew
+  system.primaryUser = "achimschneider";
+
   # Nix-Einstellungen
+  # Determinate Nix verwaltet die Nix-Installation selbst
+  nix.enable = false;
   nix.settings = {
     experimental-features = "nix-command flakes";
-    trusted-users = [ "achim" "@admin" ];
+    trusted-users = [ "achimschneider" "@admin" ];
   };
 
   # User-Konto
-  users.users.achim = {
-    name = "achim";
-    home = "/Users/achim";
+  users.users.achimschneider = {
+    name = "achimschneider";
+    home = "/Users/achimschneider";
   };
-
-  # Services
-  services.nix-daemon.enable = true;
-
-  # Automatische System-Updates (manuell kontrolliert)
-  system.autoUpgrade.enable = false;
 
   # Programme die system-weit verfügbar sein sollen
   programs.zsh.enable = true;  # Default shell compatibility

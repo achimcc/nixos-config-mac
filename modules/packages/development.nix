@@ -4,8 +4,9 @@
   homebrew = {
     enable = true;
     casks = [
-      "cursor"
-      "visual-studio-code"
+      # Problematische Casks temporär deaktiviert
+      # "cursor"
+      # "visual-studio-code"
       "dbeaver-community"
       "warp"
     ];

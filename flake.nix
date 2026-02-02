@@ -32,7 +32,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.achim = import ./home.nix;
+            home-manager.users.achimschneider = import ./home.nix;
           }
         ];
       };
