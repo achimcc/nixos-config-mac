@@ -4,6 +4,7 @@
   # Module imports (will be added incrementally)
   imports = [
     ./modules/system/dock.nix
+    ./modules/system/finder.nix
   ];
 
   # Basis-System-Einstellungen
