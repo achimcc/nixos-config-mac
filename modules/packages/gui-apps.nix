@@ -8,7 +8,7 @@
   homebrew.casks = [
     # Problematische Casks temporär deaktiviert
     # "google-chrome"
-    "zen-browser"
+    "zen"
     "basictex"
     # "ledger-live"
     # "gather"
