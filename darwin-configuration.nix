@@ -3,9 +3,7 @@
 {
   # Module imports (will be added incrementally)
   imports = [
-    # System settings modules will be added here
-    # Package modules will be added here
-    # Secrets module will be added here
+    ./modules/system/dock.nix
   ];
 
   # Basis-System-Einstellungen
