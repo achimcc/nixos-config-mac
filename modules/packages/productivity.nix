@@ -9,7 +9,7 @@
     # "logseq"
     # "trilium-notes"
     "maccy"
-    # "raycast"
+    "raycast"
     # "microsoft-to-do"
   ];
 }

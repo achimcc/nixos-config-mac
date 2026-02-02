@@ -11,6 +11,7 @@
     minimize-to-application = true;
     mru-spaces = false;  # Spaces nicht automatisch neu ordnen
     persistent-apps = [
+      "/System/Applications/Finder.app"
       "/Applications/Safari.app"
       "/Applications/Warp.app"
       "/Applications/Cursor.app"
