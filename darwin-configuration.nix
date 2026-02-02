@@ -7,6 +7,7 @@
     ./modules/system/finder.nix
     ./modules/system/trackpad.nix
     ./modules/system/defaults.nix
+    ./modules/packages/cli-tools.nix
   ];
 
   # Basis-System-Einstellungen
