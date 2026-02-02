@@ -1,0 +1,16 @@
+# Nix build results
+result
+result-*
+
+# Secrets (encrypted version is tracked)
+secrets/secrets.yaml.dec
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
