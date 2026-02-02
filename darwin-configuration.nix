@@ -5,6 +5,7 @@
   imports = [
     ./modules/system/dock.nix
     ./modules/system/finder.nix
+    ./modules/system/trackpad.nix
   ];
 
   # Basis-System-Einstellungen
