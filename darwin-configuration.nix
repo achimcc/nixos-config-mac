@@ -6,6 +6,7 @@
     ./modules/system/dock.nix
     ./modules/system/finder.nix
     ./modules/system/trackpad.nix
+    ./modules/system/defaults.nix
   ];
 
   # Basis-System-Einstellungen
