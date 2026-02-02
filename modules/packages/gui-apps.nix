@@ -7,6 +7,7 @@
 
   homebrew.casks = [
     "google-chrome"
+    "zen"
     "basictex"
     "ledger-live"
     "gather"
