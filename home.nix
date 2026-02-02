@@ -27,10 +27,14 @@
   };
 
   # Nushell-Konfiguration (via home.file statt programs.nushell um Build-Probleme zu vermeiden)
-  home.file.".config/nushell/config.nu".text = ''
+  # macOS nushell verwendet ~/Library/Application Support/nushell/ statt ~/.config/nushell/
+  home.file."Library/Application Support/nushell/config.nu".text = ''
     $env.config = {
       show_banner: false
     }
+
+    # Add nix-darwin system paths
+    $env.PATH = ($env.PATH | split row (char esep) | prepend "/run/current-system/sw/bin" | prepend "/nix/var/nix/profiles/default/bin")
 
     # Load cargo environment if it exists
     if ("${config.home.homeDirectory}/.cargo/env.nu" | path exists) {
@@ -39,7 +43,7 @@
 
     # Custom command: nix rebuild switch
     def nrs [] {
-      darwin-rebuild switch --flake /Users/achimschneider/nix-darwin-config#achims-mac
+      sudo darwin-rebuild switch --flake /Users/achimschneider/nix-darwin-config#achims-mac
     }
 
     # AWS Profile Switcher
