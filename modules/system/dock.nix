@@ -12,6 +12,7 @@
     mru-spaces = false;  # Spaces nicht automatisch neu ordnen
     persistent-apps = [
       "/System/Applications/Finder.app"
+      "/System/Applications/Launchpad.app"
       "/Applications/Safari.app"
       "/Applications/Warp.app"
       "/Applications/Cursor.app"
