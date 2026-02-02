@@ -10,6 +10,7 @@
     ./modules/packages/cli-tools.nix
     ./modules/packages/development.nix
     ./modules/packages/productivity.nix
+    ./modules/packages/gui-apps.nix
   ];
 
   # Basis-System-Einstellungen
