@@ -8,6 +8,7 @@
     ./modules/system/trackpad.nix
     ./modules/system/defaults.nix
     ./modules/packages/cli-tools.nix
+    ./modules/packages/development.nix
   ];
 
   # Basis-System-Einstellungen
