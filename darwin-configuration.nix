@@ -9,6 +9,7 @@
     ./modules/system/defaults.nix
     ./modules/packages/cli-tools.nix
     ./modules/packages/development.nix
+    ./modules/packages/productivity.nix
   ];
 
   # Basis-System-Einstellungen
