@@ -12,6 +12,7 @@
     "basictex"
     "joplin"
     "coteditor"
+    "mark-text"  # Deprecated, wird am 2026-09-01 deaktiviert
     # "ledger-live"
     # "gather"
     # "remarkable"
