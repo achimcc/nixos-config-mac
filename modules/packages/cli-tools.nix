@@ -12,6 +12,7 @@
     (pkgs.nushell.overrideAttrs (old: {
       doCheck = false;  # Skip tests that fail on macOS with "Operation not permitted"
     }))
+    starship
     fzf
     carapace
 

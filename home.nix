@@ -108,6 +108,21 @@
 
       npx cdk ...$args
     }
+
+    # Starship prompt
+    use std "path add"
+    $env.STARSHIP_SHELL = "nu"
+    def create_left_prompt [] {
+      starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)'
+    }
+    $env.PROMPT_COMMAND = { || create_left_prompt }
+    $env.PROMPT_COMMAND_RIGHT = ""
+
+    # Carapace completions
+    $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
+    mkdir ~/.cache/carapace
+    carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
+    source ~/.cache/carapace/init.nu
   '';
 
   # Zsh-Konfiguration (als Fallback)
