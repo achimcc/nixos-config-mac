@@ -1,0 +1,27 @@
+{ config, pkgs, ... }:
+
+{
+  # duti für Datei-Assoziationen
+  homebrew.brews = [
+    "duti"
+  ];
+
+  # Aktivierungsskript zum Setzen der Datei-Assoziationen
+  system.activationScripts.postUserActivation.text = ''
+    # Setze Joplin als Standard-App für Markdown-Dateien
+    # Warte bis duti verfügbar ist
+    if command -v duti &> /dev/null; then
+      echo "Setting file associations..."
+      # .md Dateien mit Joplin öffnen
+      duti -s net.cozic.joplin-desktop .md all 2>/dev/null || \
+      duti -s net.cozic.joplin .md all 2>/dev/null || \
+      echo "Warning: Could not set Joplin as default for .md files. Make sure Joplin is installed."
+
+      # .markdown Dateien mit Joplin öffnen
+      duti -s net.cozic.joplin-desktop .markdown all 2>/dev/null || \
+      duti -s net.cozic.joplin .markdown all 2>/dev/null || true
+    else
+      echo "Note: duti not yet available. File associations will be set after next rebuild."
+    fi
+  '';
+}
