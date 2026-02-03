@@ -9,7 +9,9 @@
     gitmoji-cli
 
     # Shell & Terminal
-    # nushell (manuell installiert wegen Build-Problemen in nixpkgs)
+    (pkgs.nushell.overrideAttrs (old: {
+      doCheck = false;  # Skip tests that fail on macOS with "Operation not permitted"
+    }))
     fzf
     carapace
 
@@ -17,7 +19,7 @@
     docker
 
     # Cloud & Infrastructure
-    awscli
+    # awscli moved to home.nix as awscli2 for SSO support
 
     # File Processing
     jq
