@@ -24,6 +24,7 @@
     jless
     yq-go
     pdfcpu
+    pandoc
 
     # Security & Crypto
     gnupg

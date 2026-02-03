@@ -10,6 +10,7 @@
     # "google-chrome"
     "zen"
     "basictex"
+    "joplin"
     # "ledger-live"
     # "gather"
     # "remarkable"
