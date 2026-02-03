@@ -11,6 +11,7 @@
     "zen"
     "basictex"
     "joplin"
+    "coteditor"
     # "ledger-live"
     # "gather"
     # "remarkable"
