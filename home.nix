@@ -47,22 +47,22 @@
       }
     }
 
-    # In config.nu ganz oben oder bei den Pfad-Definitionen:
-
-    # 1. Ermittle dynamisch, wo npm globale Pakete speichert
-    let npm_prefix = (npm prefix -g | str trim)
-    let npm_bin = ($npm_prefix | path join "bin")
-
-    # 2. Füge diesen Pfad zu deinem PATH hinzu, falls er existiert
-    if ($npm_bin | path exists) {
-        $env.PATH = ($env.PATH | split row (char esep) | prepend $npm_bin)
-    }
+    # Setup PATH first, before any commands that need it
 
     # Add Home Manager profile bin BEFORE system paths (to prefer user-installed packages)
     $env.PATH = ($env.PATH | split row (char esep) | prepend "${config.home.homeDirectory}/.nix-profile/bin")
 
     # Add nix-darwin system paths
     $env.PATH = ($env.PATH | split row (char esep) | prepend "/run/current-system/sw/bin" | prepend "/nix/var/nix/profiles/default/bin")
+
+    # Add npm global bin to PATH if npm is available
+    if (which npm | is-not-empty) {
+      let npm_prefix = (npm prefix -g | str trim)
+      let npm_bin = ($npm_prefix | path join "bin")
+      if ($npm_bin | path exists) {
+        $env.PATH = ($env.PATH | split row (char esep) | prepend $npm_bin)
+      }
+    }
 
     # Load cargo environment if it exists
     if ("${config.home.homeDirectory}/.cargo/env.nu" | path exists) {
