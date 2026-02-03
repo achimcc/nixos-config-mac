@@ -75,7 +75,7 @@
     }
 
     # AWS Profile Switcher
-    def awsp [] {
+    def --env awsp [] {
       let profile = (
         open ~/.aws/config
         | lines
