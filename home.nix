@@ -12,13 +12,13 @@
   programs.git = {
     enable = true;
     signing = {
-      key = "YOUR_GPG_KEY_ID";  # TODO: GPG Key ID eintragen
+      key = "05B0CBFAF4B16C56";
       signByDefault = true;
     };
     settings = {
       user = {
         name = "Achim Schneider";
-        email = "your-email@example.com";  # TODO: Echte Email eintragen
+        email = "achim.schneider@posteo.de";
       };
       init.defaultBranch = "main";
       pull.rebase = true;
