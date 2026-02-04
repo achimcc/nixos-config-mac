@@ -609,7 +609,7 @@
       config.tab_bar_at_bottom = false
 
       -- Shell
-      config.default_prog = { "${config.home.homeDirectory}/.nix-profile/bin/nu" }
+      config.default_prog = { "/run/current-system/sw/bin/nu" }
 
       -- Performance
       config.front_end = "WebGpu"
