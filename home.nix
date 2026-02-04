@@ -38,6 +38,9 @@
     fd  # Für Telescope file finder
     nodejs_20  # Node.js runtime
 
+    # Terminal
+    wezterm  # GPU-beschleunigter Terminal Emulator
+
     # Weitere user-spezifische Tools können hier hinzugefügt werden
   ];
 
@@ -570,6 +573,99 @@
           lazy = false,
         },
       }
+    '';
+
+    # WezTerm Configuration
+    ".config/wezterm/wezterm.lua".text = ''
+      local wezterm = require("wezterm")
+      local config = wezterm.config_builder()
+
+      -- Color scheme
+      config.color_scheme = "Tokyo Night"
+
+      -- Font
+      config.font = wezterm.font_with_fallback({
+        "JetBrains Mono",
+        "Menlo",
+        "Monaco",
+      })
+      config.font_size = 14.0
+
+      -- Window
+      config.window_decorations = "RESIZE"
+      config.window_background_opacity = 1.0
+      config.macos_window_background_blur = 10
+      config.window_padding = {
+        left = 10,
+        right = 10,
+        top = 10,
+        bottom = 10,
+      }
+
+      -- Tab bar
+      config.enable_tab_bar = true
+      config.use_fancy_tab_bar = true
+      config.hide_tab_bar_if_only_one_tab = true
+      config.tab_bar_at_bottom = false
+
+      -- Shell
+      config.default_prog = { "${config.home.homeDirectory}/.nix-profile/bin/nu" }
+
+      -- Performance
+      config.front_end = "WebGpu"
+      config.max_fps = 120
+      config.animation_fps = 60
+
+      -- Cursor
+      config.default_cursor_style = "SteadyBar"
+      config.cursor_blink_rate = 500
+
+      -- Scrollback
+      config.scrollback_lines = 10000
+
+      -- Keys
+      config.keys = {
+        -- Split panes
+        {
+          key = "d",
+          mods = "CMD",
+          action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+        },
+        {
+          key = "D",
+          mods = "CMD|SHIFT",
+          action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+        },
+        -- Navigate panes
+        {
+          key = "LeftArrow",
+          mods = "CMD|OPT",
+          action = wezterm.action.ActivatePaneDirection("Left"),
+        },
+        {
+          key = "RightArrow",
+          mods = "CMD|OPT",
+          action = wezterm.action.ActivatePaneDirection("Right"),
+        },
+        {
+          key = "UpArrow",
+          mods = "CMD|OPT",
+          action = wezterm.action.ActivatePaneDirection("Up"),
+        },
+        {
+          key = "DownArrow",
+          mods = "CMD|OPT",
+          action = wezterm.action.ActivatePaneDirection("Down"),
+        },
+        -- Close pane
+        {
+          key = "w",
+          mods = "CMD",
+          action = wezterm.action.CloseCurrentPane({ confirm = true }),
+        },
+      }
+
+      return config
     '';
   };
 }
