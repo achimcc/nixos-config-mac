@@ -16,6 +16,14 @@
     fzf
     carapace
 
+    # Modern CLI Tools (Rust-based replacements)
+    ripgrep      # rg - faster grep with .gitignore support
+    bat          # cat with syntax highlighting and Git integration
+    eza          # ls with icons, colors, and Git status
+    zoxide       # z - intelligent directory jumping
+    fd           # find with intuitive syntax
+    yazi         # terminal file manager with image preview
+
     # Docker & Container
     docker
 

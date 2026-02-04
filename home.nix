@@ -143,6 +143,17 @@
       npx cdk ...$args
     }
 
+    # Zoxide (smart cd)
+    zoxide init nushell | save -f ~/.zoxide.nu
+    source ~/.zoxide.nu
+
+    # Modern CLI tool aliases
+    alias ls = eza --icons --git
+    alias ll = eza -l --icons --git
+    alias la = eza -la --icons --git
+    alias lt = eza --tree --icons --git
+    alias cat = bat
+
     # Starship prompt
     use std "path add"
     $env.STARSHIP_SHELL = "nu"
