@@ -143,31 +143,44 @@
       npx cdk ...$args
     }
 
-    # Zoxide (smart cd)
-    zoxide init nushell | save -f ~/.zoxide.nu
-    source ~/.zoxide.nu
-
-    # Modern CLI tool aliases
-    alias ls = eza --icons --git
-    alias ll = eza -l --icons --git
-    alias la = eza -la --icons --git
-    alias lt = eza --tree --icons --git
-    alias cat = bat
-
-    # Starship prompt
-    use std "path add"
-    $env.STARSHIP_SHELL = "nu"
-    def create_left_prompt [] {
-      starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)'
+    # Zoxide (smart cd) - nur laden wenn verfügbar
+    if (which zoxide | is-not-empty) {
+      zoxide init nushell | save -f ~/.zoxide.nu
     }
-    $env.PROMPT_COMMAND = { || create_left_prompt }
-    $env.PROMPT_COMMAND_RIGHT = ""
+    # Source zoxide config if it exists
+    if ("~/.zoxide.nu" | path exists) {
+      source ~/.zoxide.nu
+    }
 
-    # Carapace completions
-    $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
-    mkdir ~/.cache/carapace
-    carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
-    source ~/.cache/carapace/init.nu
+    # Modern CLI tool aliases - nur wenn Tools verfügbar sind
+    if (which eza | is-not-empty) {
+      alias ls = eza --icons --git
+      alias ll = eza -l --icons --git
+      alias la = eza -la --icons --git
+      alias lt = eza --tree --icons --git
+    }
+    if (which bat | is-not-empty) {
+      alias cat = bat
+    }
+
+    # Starship prompt - nur wenn verfügbar
+    if (which starship | is-not-empty) {
+      use std "path add"
+      $env.STARSHIP_SHELL = "nu"
+      def create_left_prompt [] {
+        starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)'
+      }
+      $env.PROMPT_COMMAND = { || create_left_prompt }
+      $env.PROMPT_COMMAND_RIGHT = ""
+    }
+
+    # Carapace completions - nur wenn verfügbar
+    if (which carapace | is-not-empty) {
+      $env.CARAPACE_BRIDGES = 'zsh,fish,bash,inshellisense'
+      mkdir ~/.cache/carapace
+      carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
+      source ~/.cache/carapace/init.nu
+    }
   '';
 
   # Zsh-Konfiguration (als Fallback)
@@ -584,6 +597,263 @@
           lazy = false,
         },
       }
+    '';
+
+    # Hammerspoon Configuration
+    ".hammerspoon/Spoons/ReloadConfiguration.spoon/init.lua".text = ''
+      --- === ReloadConfiguration ===
+      --- Automatically reload Hammerspoon configuration on file changes
+
+      local obj = {}
+      obj.__index = obj
+
+      obj.name = "ReloadConfiguration"
+      obj.version = "1.0"
+      obj.author = "Hammerspoon"
+      obj.license = "MIT"
+
+      function obj:init()
+        self.watch = nil
+      end
+
+      function obj:start()
+        self.watch = hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", function(files)
+          local doReload = false
+          for _, file in pairs(files) do
+            if file:sub(-4) == ".lua" then
+              doReload = true
+            end
+          end
+          if doReload then
+            hs.reload()
+          end
+        end):start()
+        return self
+      end
+
+      function obj:stop()
+        if self.watch then
+          self.watch:stop()
+        end
+        return self
+      end
+
+      return obj
+    '';
+
+    ".hammerspoon/init.lua".text = ''
+      -- Hammerspoon Configuration
+      -- Reload config automatically
+      hs.loadSpoon("ReloadConfiguration")
+      spoon.ReloadConfiguration:start()
+
+      -- Hyper key definition (Cmd + Alt + Ctrl + Shift)
+      local hyper = {"cmd", "alt", "ctrl", "shift"}
+
+      -- Window Management
+      -- Half screens
+      hs.hotkey.bind(hyper, "Left", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x,
+          y = frame.y,
+          w = frame.w / 2,
+          h = frame.h
+        })
+      end)
+
+      hs.hotkey.bind(hyper, "Right", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x + frame.w / 2,
+          y = frame.y,
+          w = frame.w / 2,
+          h = frame.h
+        })
+      end)
+
+      hs.hotkey.bind(hyper, "Up", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x,
+          y = frame.y,
+          w = frame.w,
+          h = frame.h / 2
+        })
+      end)
+
+      hs.hotkey.bind(hyper, "Down", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x,
+          y = frame.y + frame.h / 2,
+          w = frame.w,
+          h = frame.h / 2
+        })
+      end)
+
+      -- Fullscreen
+      hs.hotkey.bind(hyper, "F", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        win:setFrame(screen:frame())
+      end)
+
+      -- Center window
+      hs.hotkey.bind(hyper, "C", function()
+        local win = hs.window.focusedWindow()
+        win:centerOnScreen()
+      end)
+
+      -- Quarters
+      hs.hotkey.bind({"ctrl", "alt", "cmd"}, "1", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x,
+          y = frame.y,
+          w = frame.w / 2,
+          h = frame.h / 2
+        })
+      end)
+
+      hs.hotkey.bind({"ctrl", "alt", "cmd"}, "2", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x + frame.w / 2,
+          y = frame.y,
+          w = frame.w / 2,
+          h = frame.h / 2
+        })
+      end)
+
+      hs.hotkey.bind({"ctrl", "alt", "cmd"}, "3", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x,
+          y = frame.y + frame.h / 2,
+          w = frame.w / 2,
+          h = frame.h / 2
+        })
+      end)
+
+      hs.hotkey.bind({"ctrl", "alt", "cmd"}, "4", function()
+        local win = hs.window.focusedWindow()
+        local screen = win:screen()
+        local frame = screen:frame()
+        win:setFrame({
+          x = frame.x + frame.w / 2,
+          y = frame.y + frame.h / 2,
+          w = frame.w / 2,
+          h = frame.h / 2
+        })
+      end)
+
+      -- Move window between screens
+      hs.hotkey.bind(hyper, "N", function()
+        local win = hs.window.focusedWindow()
+        win:moveToScreen(win:screen():next())
+      end)
+
+      -- Caffeine - keep computer awake
+      local caffeine = hs.menubar.new()
+
+      local function setCaffeineDisplay(state)
+        if state then
+          caffeine:setTitle("☕")
+        else
+          caffeine:setTitle("💤")
+        end
+      end
+
+      local function caffeineClicked()
+        setCaffeineDisplay(hs.caffeinate.toggle("displayIdle"))
+      end
+
+      if caffeine then
+        caffeine:setClickCallback(caffeineClicked)
+        setCaffeineDisplay(hs.caffeinate.get("displayIdle"))
+      end
+
+      -- Reload configuration shortcut
+      hs.hotkey.bind(hyper, "R", function()
+        hs.reload()
+      end)
+
+      -- Show notification on successful load
+      hs.notify.new({title="Hammerspoon", informativeText="Konfiguration geladen"}):send()
+
+      -- Console styling
+      hs.console.darkMode(true)
+
+      -- Hints for all windows
+      hs.hotkey.bind(hyper, "H", function()
+        hs.hints.windowHints()
+      end)
+
+      -- SLACK RED LIGHT INTEGRATION
+      -- Reagiert nur auf neue Slack-Nachrichten (nicht auf alle Notifications)
+
+      local isLedOn = false
+
+      -- Hilfsfunktion: LED einschalten
+      local function turnLedOn()
+        if not isLedOn then
+          print("🔴 Neue Slack-Nachricht - LED EIN")
+          hs.http.asyncGet("http://localhost:8934/blink1/fadeToRGB?rgb=%23FF0000&time=0.1", nil, function() end)
+          isLedOn = true
+          hs.notify.new({title="Slack", informativeText="Neue Nachricht!"}):send()
+        end
+      end
+
+      -- Hilfsfunktion: LED ausschalten
+      local function turnLedOff()
+        if isLedOn then
+          print("⚫ LED AUS")
+          hs.http.asyncGet("http://localhost:8934/blink1/off", nil, function() end)
+          isLedOn = false
+        end
+      end
+
+
+
+
+      -- App Watcher: LED ausschalten wenn Slack aktiviert wird
+      local appWatcher = hs.application.watcher.new(function(appName, eventType, appObject)
+        if appName == "Slack" and eventType == hs.application.watcher.activated then
+          print("Slack aktiviert - LED AUS")
+          turnLedOff()
+        end
+      end)
+      appWatcher:start()
+
+      -- Test-Hotkeys
+      hs.hotkey.bind(hyper, "B", function()
+        hs.alert.show("Test: blink(1) ROT")
+        turnLedOn()
+      end)
+
+      hs.hotkey.bind(hyper, "X", function()
+        hs.alert.show("blink(1) AUS")
+        turnLedOff()
+      end)
+
+      hs.hotkey.bind(hyper, "S", function()
+        hs.alert.show(string.format("LED Status: %s", isLedOn and "ON" or "OFF"))
+      end)
     '';
 
     # WezTerm Configuration
