@@ -845,6 +845,36 @@
         return true
       end
 
+      -- Notification Watcher: Überwacht alle Slack-Notifications
+      local notificationWatcher = hs.distributednotifications.new(function(name, object, userInfo)
+        -- Nur Slack-Notifications
+        if name ~= "com.tinyspeck.slackmacgap.notification" then
+          return
+        end
+
+        -- Extrahiere Titel und Body aus userInfo
+        local title = userInfo and userInfo.title or nil
+        local body = userInfo and userInfo.body or nil
+
+        -- Debug: Logge alle Slack-Notifications
+        if title then
+          print(string.format("📬 Slack Notification: '%s'", title))
+          if body then
+            print(string.format("   Body: %s", body:sub(1, 50)))
+          end
+        end
+
+        -- Prüfe ob es eine DM ist
+        if isDM(title, body) then
+          print(string.format("🔴 DM erkannt von: %s", title or "unknown"))
+          turnLedOn()
+        else
+          print("⚪ Channel-Nachricht ignoriert")
+        end
+      end)
+      notificationWatcher:start()
+      print("Slack DM Watcher gestartet")
+
       -- App Watcher: LED ausschalten wenn Slack aktiviert wird
       local appWatcher = hs.application.watcher.new(function(appName, eventType, appObject)
         if appName == "Slack" and eventType == hs.application.watcher.activated then
