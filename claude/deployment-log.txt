@@ -1,0 +1,31 @@
+# Slack DM Blink(1) Integration - Deployment Log
+
+## 2026-02-13 - Configuration Ready for Deployment
+
+### Status: READY FOR USER ACTION
+
+All code changes completed (Tasks 1-5):
+- Badge count polling removed
+- DM detection function implemented
+- Notification watcher added
+- App watcher updated
+- Status hotkey updated
+
+### Configuration Files Modified:
+- home.nix: Updated Hammerspoon init.lua with new notification-based approach
+
+### Next Steps (User Action Required):
+1. Run: sudo darwin-rebuild switch --flake .#achims-mac
+2. Reload Hammerspoon (see claude/reload-instructions.md)
+3. Test integration (see claude/deployment-instructions.md)
+
+### User Cannot Complete These Steps:
+- Claude cannot run sudo commands (password required)
+- Claude cannot reload Hammerspoon programmatically
+- Claude cannot test with real Slack notifications
+
+### Documentation Created:
+- claude/reload-instructions.md: How to reload Hammerspoon
+- claude/deployment-instructions.md: Complete deployment guide
+
+Configuration is ready and waiting for user to apply.
