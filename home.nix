@@ -828,8 +828,22 @@
         end
       end
 
+      -- DM-Erkennung: Analysiert Notification-Format
+      local function isDM(title, body)
+        if not title then return false end
 
+        -- Ausschließen: Channel-Notifications
+        if title:match("#") then return false end
+        if title:match("in #") then return false end
+        if body and body:match("in #") then return false end
 
+        -- Ausschließen: System-Notifications
+        if title:match("Slack") then return false end
+        if title:match("Reminder") then return false end
+
+        -- Alles andere = vermutlich DM
+        return true
+      end
 
       -- App Watcher: LED ausschalten wenn Slack aktiviert wird
       local appWatcher = hs.application.watcher.new(function(appName, eventType, appObject)
