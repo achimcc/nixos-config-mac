@@ -805,9 +805,10 @@
       end)
 
       -- SLACK RED LIGHT INTEGRATION
-      -- Uses Badge Count Polling as primary method (Distributed Notifications don't work reliably)
+      -- Reagiert nur auf neue Slack-Nachrichten (nicht auf alle Notifications)
 
       local isLedOn = false
+      local lastBadgeCount = nil  -- nil = noch nicht initialisiert
 
       -- Hilfsfunktion: LED einschalten
       local function turnLedOn()
@@ -815,61 +816,84 @@
           print("🔴 Neue Slack-Nachricht - LED EIN")
           hs.http.asyncGet("http://localhost:8934/blink1/fadeToRGB?rgb=%23FF0000&time=0.1", nil, function() end)
           isLedOn = true
+          hs.notify.new({title="Slack", informativeText="Neue Nachricht!"}):send()
         end
       end
 
       -- Hilfsfunktion: LED ausschalten
       local function turnLedOff()
         if isLedOn then
-          print("⚫ Slack gelesen - LED AUS")
+          print("⚫ LED AUS")
           hs.http.asyncGet("http://localhost:8934/blink1/off", nil, function() end)
           isLedOn = false
         end
       end
 
-      -- BADGE COUNT WATCHER: Primary method for detecting new messages
-      -- Slack shows unread message count in Dock Badge
-      local lastDockBadge = 0
-      local dockBadgeWatcher = hs.timer.doEvery(3, function()
-        local slack = hs.application.find("com.tinyspeck.slackmacgap")
-        if not slack then return end
-
-        -- Check if Slack is in foreground
-        local isFocused = slack:isFrontmost()
-
-        -- Get Dock Badge count
+      -- Badge Count auslesen (Dock Badge = nur echte Nachrichten in Slack)
+      local function getSlackBadge()
         local output, status = hs.execute("lsappinfo -all list | grep -A 20 'com.tinyspeck.slackmacgap'")
         if status and output then
-          -- StatusLabel = Dock Badge (only shown for unread messages)
           local badge = output:match('"StatusLabel"=%s*{%s*"label"%s*=%s*"(%d+)"')
-          local currentBadge = tonumber(badge) or 0
+          return tonumber(badge) or 0
+        end
+        return 0
+      end
 
-          -- Only trigger LED changes when Slack is NOT in foreground
-          if not isFocused then
-            -- New messages: Badge increases
-            if currentBadge > 0 and currentBadge > lastDockBadge then
+      -- Initialisiere Badge Count beim Start
+      hs.timer.doAfter(1, function()
+        lastBadgeCount = getSlackBadge()
+        print(string.format("Slack Watcher initialisiert - Badge Count: %d", lastBadgeCount))
+      end)
+
+      -- Polling: Überwache Badge Count alle 3 Sekunden
+      local slackWatcher = hs.timer.doEvery(3, function()
+        -- Überspringe wenn noch nicht initialisiert
+        if lastBadgeCount == nil then
+          return
+        end
+
+        local currentBadge = getSlackBadge()
+
+        -- Prüfe ob Slack läuft und im Vordergrund ist
+        local slack = hs.application.find("com.tinyspeck.slackmacgap")
+        if not slack then
+          return  -- Slack läuft nicht
+        end
+
+        local slackIsFocused = slack:isFrontmost()
+
+        -- NUR bei Änderungen reagieren
+        if currentBadge ~= lastBadgeCount then
+          print(string.format("Slack Badge: %d -> %d (focused: %s)",
+            lastBadgeCount, currentBadge, slackIsFocused and "yes" or "no"))
+
+          -- LED nur einschalten wenn Slack NICHT im Vordergrund
+          if not slackIsFocused then
+            if currentBadge > lastBadgeCount then
+              -- Badge gestiegen = neue Nachricht
               turnLedOn()
-            -- All read: Badge = 0
-            elseif currentBadge == 0 and lastDockBadge > 0 then
+            elseif currentBadge == 0 then
+              -- Badge = 0 = alle gelesen
               turnLedOff()
             end
+          else
+            -- Slack im Vordergrund = LED immer aus
+            turnLedOff()
           end
 
-          lastDockBadge = currentBadge
+          lastBadgeCount = currentBadge
         end
       end)
 
-      -- APP FOCUS WATCHER: Turn off LED when Slack is activated
+      -- App Watcher: LED ausschalten wenn Slack aktiviert wird
       local appWatcher = hs.application.watcher.new(function(appName, eventType, appObject)
         if appName == "Slack" and eventType == hs.application.watcher.activated then
           print("Slack aktiviert - LED AUS")
           turnLedOff()
-
-          -- Update badge count after 2 seconds
-          hs.timer.doAfter(2, function()
-            local output = hs.execute("lsappinfo -all list | grep -A 20 'com.tinyspeck.slackmacgap'")
-            local badge = output:match('"StatusLabel"=%s*{%s*"label"%s*=%s*"(%d+)"')
-            lastDockBadge = tonumber(badge) or 0
+          -- Badge Count nach 1 Sekunde aktualisieren
+          hs.timer.doAfter(1, function()
+            lastBadgeCount = getSlackBadge()
+            print(string.format("Badge Count aktualisiert: %d", lastBadgeCount))
           end)
         end
       end)
@@ -887,10 +911,9 @@
       end)
 
       hs.hotkey.bind(hyper, "S", function()
-        local output = hs.execute("lsappinfo -all list | grep -A 20 'com.tinyspeck.slackmacgap'")
-        local badge = output:match('"StatusLabel"=%s*{%s*"label"%s*=%s*"(%d+)"')
-        hs.alert.show(string.format("Dock Badge: %s, LED: %s",
-          badge or "0", isLedOn and "ON" or "OFF"))
+        local badge = getSlackBadge()
+        hs.alert.show(string.format("Badge: %d, LED: %s",
+          badge, isLedOn and "ON" or "OFF"))
       end)
     '';
 

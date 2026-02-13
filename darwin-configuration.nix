@@ -13,6 +13,7 @@
     ./modules/packages/development.nix
     ./modules/packages/productivity.nix
     ./modules/packages/gui-apps.nix
+    ./modules/packages/hammerspoon.nix
     ./modules/secrets/sops.nix
   ];
 

@@ -35,10 +35,10 @@
     };
 
     "org.p0deje.Maccy" = {
-      # Tastenkombination: Command+Shift+C für Popup
-      KeyboardShortcuts_popup = "{\"carbonModifiers\":768,\"carbonKeyCode\":8}";
+      # Tastenkombination: Command+Shift+V für Popup
+      KeyboardShortcuts_popup = "{\"carbonModifiers\":768,\"carbonKeyCode\":9}";
       # Paste direkt beim Auswählen aus dem Verlauf (0 = nur kopieren, 1 = direkt einfügen)
-      pasteByDefault = 0;
+      pasteByDefault = 1;
       # Such-, Titel- und Footer-Ansicht aktiviert
       showSearch = 1;
       showTitle = 1;

@@ -65,6 +65,32 @@ Um die Konfiguration zu erweitern:
 
 Alternativ kann die Konfiguration direkt in `~/.hammerspoon/init.lua` bearbeitet werden (wird bei nächstem rebuild überschrieben).
 
+## Slack-Integration mit Blink(1) LED
+
+Hammerspoon überwacht Slack-Benachrichtigungen und schaltet eine Blink(1) USB-LED auf rot, wenn neue Nachrichten eingehen.
+
+### Funktionsweise
+- **Badge Count Monitoring**: Prüft alle 3 Sekunden, ob neue ungelesene Nachrichten vorliegen
+- **Distributed Notifications**: Backup-Methode für Benachrichtigungen
+- **Auto-Reset**: Schaltet die LED automatisch aus, wenn Slack aktiviert wird
+
+### Voraussetzungen
+1. Blink1Control2 muss installiert und laufen
+2. HTTP-Server in Blink1Control2 muss aktiviert sein (Standard: Port 8934)
+3. Slack muss installiert sein
+
+### Test-Hotkeys
+- **Hyper + B**: LED auf rot testen (Dauerlicht)
+- **Hyper + X**: LED ausschalten
+
+### Debugging
+Eine Test-Version steht bereit in: `~/nix-darwin-config/claude/hammerspoon-slack-test.lua`
+
+Zum Testen in der Hammerspoon Console:
+```lua
+dofile(os.getenv("HOME") .. "/nix-darwin-config/claude/hammerspoon-slack-test.lua")
+```
+
 ## Nützliche Ressourcen
 
 - [Hammerspoon Dokumentation](https://www.hammerspoon.org/docs/)

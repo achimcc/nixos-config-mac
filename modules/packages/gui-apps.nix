@@ -13,6 +13,7 @@
     "joplin"
     "coteditor"
     "mark-text"  # Deprecated, wird am 2026-09-01 deaktiviert
+    "blink1control"  # USB LED control für Slack-Benachrichtigungen
     # "ledger-live"
     # "gather"
     # "remarkable"
