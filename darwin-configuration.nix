@@ -8,6 +8,7 @@
     ./modules/system/trackpad.nix
     ./modules/system/defaults.nix
     ./modules/system/file-associations.nix
+    ./modules/system/launch-agents.nix
     ./modules/packages/cli-tools.nix
     ./modules/packages/development.nix
     ./modules/packages/productivity.nix

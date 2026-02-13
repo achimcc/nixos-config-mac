@@ -33,5 +33,20 @@
       ShowMountedServersOnDesktop = true;
       ShowRemovableMediaOnDesktop = true;
     };
+
+    "org.p0deje.Maccy" = {
+      # Tastenkombination: Command+Shift+C für Popup
+      KeyboardShortcuts_popup = "{\"carbonModifiers\":768,\"carbonKeyCode\":8}";
+      # Paste direkt beim Auswählen aus dem Verlauf (0 = nur kopieren, 1 = direkt einfügen)
+      pasteByDefault = 0;
+      # Such-, Titel- und Footer-Ansicht aktiviert
+      showSearch = 1;
+      showTitle = 1;
+      showFooter = 1;
+      # Fenstergröße
+      windowSize = "[450,800]";
+      # Automatische Updates deaktivieren (wird durch Homebrew verwaltet)
+      SUEnableAutomaticChecks = 0;
+    };
   };
 }
