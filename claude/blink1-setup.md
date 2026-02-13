@@ -53,8 +53,12 @@ Die Hammerspoon-Konfiguration:
 5. Status-Check: `Cmd+Alt+Ctrl+Shift+S`
 6. Debug-Script verwenden: `claude/debug-notifications.lua`
 
-### Slack-Einstellungen
+<!-- ### Slack-Einstellungen
+
+Hinweis: Badge-Einstellungen in Slack sind nicht mehr relevant für die notification-basierte Erkennung.
+macOS System Notifications müssen für Slack erlaubt sein, damit Hammerspoon die Notifications empfangen kann.
 
 Stelle sicher, dass Slack Notifications aktiviert sind:
 - **Slack → Preferences → Notifications**
 - macOS System Notifications müssen für Slack erlaubt sein
+-->
